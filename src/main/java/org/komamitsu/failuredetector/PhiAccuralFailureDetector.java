@@ -40,7 +40,7 @@ public class PhiAccuralFailureDetector
      * @param maxSampleSize Number of samples to use for calculation of mean and standard deviation of
      *   inter-arrival times.
      *
-     * @param minStdDeviation Minimum standard deviation to use for the normal distribution used when calculating phi.
+     * @param minStdDeviationMillis Minimum standard deviation to use for the normal distribution used when calculating phi.
      *   Too low standard deviation might result in too much sensitivity for sudden, but normal, deviations
      *   in heartbeat inter arrival times.
      *
@@ -53,7 +53,7 @@ public class PhiAccuralFailureDetector
      *   to this duration, with a with rather high standard deviation (since environment is unknown
      *   in the beginning)
      */
-    public PhiAccuralFailureDetector(double threshold, int maxSampleSize, double minStdDeviation,
+    private PhiAccuralFailureDetector(double threshold, int maxSampleSize, double minStdDeviationMillis,
             long acceptableHeartbeatPauseMillis, long firstHeartbeatEstimateMillis)
     {
         if (threshold <= 0) {
@@ -62,8 +62,8 @@ public class PhiAccuralFailureDetector
         if (maxSampleSize <= 0) {
             throw new IllegalArgumentException("Sample size must be > 0: " + maxSampleSize);
         }
-        if (minStdDeviation <= 0) {
-            throw new IllegalArgumentException("Minimum standard deviation must be > 0: " + minStdDeviation);
+        if (minStdDeviationMillis <= 0) {
+            throw new IllegalArgumentException("Minimum standard deviation must be > 0: " + minStdDeviationMillis);
         }
         if (acceptableHeartbeatPauseMillis < 0) {
             throw new IllegalArgumentException("Acceptable heartbeat pause millis must be >= 0: " + acceptableHeartbeatPauseMillis);
@@ -73,7 +73,7 @@ public class PhiAccuralFailureDetector
         }
 
         this.threshold = threshold;
-        this.minStdDeviationMillis = minStdDeviation;
+        this.minStdDeviationMillis = minStdDeviationMillis;
         this.acceptableHeartbeatPauseMillis = acceptableHeartbeatPauseMillis;
 
         long stdDeviationMillis = firstHeartbeatEstimateMillis / 4;
@@ -81,17 +81,12 @@ public class PhiAccuralFailureDetector
         heartbeatHistory.add(firstHeartbeatEstimateMillis - stdDeviationMillis).add(firstHeartbeatEstimateMillis + stdDeviationMillis);
     }
 
-    public PhiAccuralFailureDetector()
-    {
-        this(16.0, 200, 500, 0, 500);
-    }
-
     private double ensureValidStdDeviation(double stdDeviationMillis)
     {
         return Math.max(stdDeviationMillis, minStdDeviationMillis);
     }
 
-    public double phi(long timestampMillis)
+    public synchronized double phi(long timestampMillis)
     {
         Long lastTimestampMillis = this.lastTimestampMillis.get();
         if (lastTimestampMillis == null) {
@@ -112,25 +107,64 @@ public class PhiAccuralFailureDetector
         }
     }
 
-    public boolean isAvailable(long timestamp)
+    public boolean isAvailable(long timestampMillis)
     {
-        return phi(timestamp) < threshold;
+        return phi(timestampMillis) < threshold;
     }
 
-    public void add(long timestamp)
+    public synchronized void heartbeat(long timestampMillis)
     {
-        Long lastTimestampMillis = this.lastTimestampMillis.getAndSet(timestamp);
+        Long lastTimestampMillis = this.lastTimestampMillis.getAndSet(timestampMillis);
         if (lastTimestampMillis != null) {
-            long interval = timestamp - lastTimestampMillis;
-            if (isAvailable(timestamp)) {
+            long interval = timestampMillis - lastTimestampMillis;
+            if (isAvailable(timestampMillis)) {
                 heartbeatHistory.add(interval);
             }
         }
     }
 
-    public void add()
+    public void heartbeat()
     {
-        add(System.currentTimeMillis());
+        heartbeat(System.currentTimeMillis());
+    }
+
+    public static class Builder
+    {
+        private double threshold = 16.0;
+        private int maxSampleSize = 200;
+        private double minStdDeviationMillis = 500;
+        private long acceptableHeartbeatPauseMillis = 0;
+        private long firstHeartbeatEstimateMillis = 500;
+
+        public void setThreshold(double threshold)
+        {
+            this.threshold = threshold;
+        }
+
+        public void setMaxSampleSize(int maxSampleSize)
+        {
+            this.maxSampleSize = maxSampleSize;
+        }
+
+        public void setMinStdDeviationMillis(double minStdDeviationMillis)
+        {
+            this.minStdDeviationMillis = minStdDeviationMillis;
+        }
+
+        public void setAcceptableHeartbeatPauseMillis(long acceptableHeartbeatPauseMillis)
+        {
+            this.acceptableHeartbeatPauseMillis = acceptableHeartbeatPauseMillis;
+        }
+
+        public void setFirstHeartbeatEstimateMillis(long firstHeartbeatEstimateMillis)
+        {
+            this.firstHeartbeatEstimateMillis = firstHeartbeatEstimateMillis;
+        }
+
+        public PhiAccuralFailureDetector build()
+        {
+            return new PhiAccuralFailureDetector(threshold, maxSampleSize, minStdDeviationMillis, acceptableHeartbeatPauseMillis, firstHeartbeatEstimateMillis);
+        }
     }
 
     private static class HeartbeatHistory

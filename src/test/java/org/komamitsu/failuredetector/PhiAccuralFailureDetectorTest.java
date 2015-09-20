@@ -9,7 +9,7 @@ public class PhiAccuralFailureDetectorTest
     @Test
     public void test()
     {
-        PhiAccuralFailureDetector failureDetector = new PhiAccuralFailureDetector();
+        PhiAccuralFailureDetector failureDetector = new PhiAccuralFailureDetector.Builder().build();
         long now = 1420070400000L;
         for (int i = 0; i < 300; i++) {
             long timestampMillis = now + i * 1000;
@@ -58,7 +58,7 @@ public class PhiAccuralFailureDetectorTest
                     continue;
                 }
             }
-            failureDetector.add(timestampMillis);
+            failureDetector.heartbeat(timestampMillis);
             assertTrue(failureDetector.phi(timestampMillis) < 0.1);
             assertTrue(failureDetector.isAvailable(timestampMillis));
         }
