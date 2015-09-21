@@ -146,29 +146,34 @@ public class PhiAccuralFailureDetector
         private long acceptableHeartbeatPauseMillis = 0;
         private long firstHeartbeatEstimateMillis = 500;
 
-        public void setThreshold(double threshold)
+        public Builder setThreshold(double threshold)
         {
             this.threshold = threshold;
+            return this;
         }
 
-        public void setMaxSampleSize(int maxSampleSize)
+        public Builder setMaxSampleSize(int maxSampleSize)
         {
             this.maxSampleSize = maxSampleSize;
+            return this;
         }
 
-        public void setMinStdDeviationMillis(double minStdDeviationMillis)
+        public Builder setMinStdDeviationMillis(double minStdDeviationMillis)
         {
             this.minStdDeviationMillis = minStdDeviationMillis;
+            return this;
         }
 
-        public void setAcceptableHeartbeatPauseMillis(long acceptableHeartbeatPauseMillis)
+        public Builder setAcceptableHeartbeatPauseMillis(long acceptableHeartbeatPauseMillis)
         {
             this.acceptableHeartbeatPauseMillis = acceptableHeartbeatPauseMillis;
+            return this;
         }
 
-        public void setFirstHeartbeatEstimateMillis(long firstHeartbeatEstimateMillis)
+        public Builder setFirstHeartbeatEstimateMillis(long firstHeartbeatEstimateMillis)
         {
             this.firstHeartbeatEstimateMillis = firstHeartbeatEstimateMillis;
+            return this;
         }
 
         public PhiAccuralFailureDetector build()
