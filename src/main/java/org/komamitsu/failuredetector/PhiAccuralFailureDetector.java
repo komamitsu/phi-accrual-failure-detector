@@ -107,6 +107,11 @@ public class PhiAccuralFailureDetector
         }
     }
 
+    public synchronized double phi()
+    {
+        return phi(System.currentTimeMillis());
+    }
+
     public boolean isAvailable(long timestampMillis)
     {
         return phi(timestampMillis) < threshold;
