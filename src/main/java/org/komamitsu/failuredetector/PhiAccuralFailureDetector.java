@@ -117,6 +117,11 @@ public class PhiAccuralFailureDetector
         return phi(timestampMillis) < threshold;
     }
 
+    public boolean isAvailable()
+    {
+        return phi(System.currentTimeMillis()) < threshold;
+    }
+
     public synchronized void heartbeat(long timestampMillis)
     {
         Long lastTimestampMillis = this.lastTimestampMillis.getAndSet(timestampMillis);
