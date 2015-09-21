@@ -16,7 +16,7 @@ where F is the cumulative distribution function of a normal distribution with me
 ### Gradle
 
     dependencies {
-        compile group: 'org.komamitsu', name: 'phi-accural-failure-detector', version: 'x.x.x'
+        compile 'org.komamitsu:phi-accural-failure-detector:0.0.2'
     }
 
 ### Maven
@@ -24,7 +24,7 @@ where F is the cumulative distribution function of a normal distribution with me
     <dependency>
         <groupId>org.komamitsu</groupId>
         <artifactId>phi-accural-failure-detector</artifactId>
-        <version>x.x.x</version>
+        <version>0.0.2</version>
     </dependency>
  
  
