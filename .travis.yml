@@ -1,0 +1,18 @@
+language: java
+
+jdk:
+  # Tests On Travis CI fail with Java7 due to this exception...
+  #   java.security.NoSuchProviderException: no such provider: SunEC
+  # - openjdk7
+  # - oraclejdk7
+  - openjdk8
+  - oraclejdk8
+
+install:
+  - ./gradlew assemble -x signArchives -x uploadArchives
+
+script:
+  - ./gradlew check --debug --stacktrace --info
+
+after_success:
+  - ./gradlew jacocoTestReport coveralls

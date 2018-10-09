@@ -1,6 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'jacoco'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'com.github.kt3k.coveralls'
 
 group = 'org.komamitsu'
 archivesBaseName = 'phi-accural-failure-detector'
@@ -8,6 +11,9 @@ version = '0.0.4-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
+
+def deployUsername = project.hasProperty('ossrhUsername') ? ossrhUsername : ''
+def deployPassword = project.hasProperty('ossrhPassword') ? ossrhPassword : ''
 
 repositories {
     mavenCentral()
@@ -41,11 +47,11 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: deployUsername, password: deployPassword)
             }
 
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                authentication(userName: deployUsername, password: deployPassword)
             }
 
             pom.project {
@@ -78,3 +84,20 @@ uploadArchives {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
