@@ -8,6 +8,9 @@ jdk:
   - openjdk8
   - oraclejdk8
 
+install:
+  - ./gradlew assemble -x signArchives -x uploadArchives
+
 script:
   - ./gradlew check --debug --stacktrace --info
 
