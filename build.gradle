@@ -1,6 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'jacoco'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'com.github.kt3k.coveralls'
 
 group = 'org.komamitsu'
 archivesBaseName = 'phi-accural-failure-detector'
@@ -78,3 +81,21 @@ uploadArchives {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
