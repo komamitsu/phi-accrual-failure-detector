@@ -7,7 +7,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 
 group = 'org.komamitsu'
 archivesBaseName = 'phi-accural-failure-detector'
-version = '0.0.4-SNAPSHOT'
+version = '0.0.5'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
