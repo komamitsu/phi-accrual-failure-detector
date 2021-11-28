@@ -192,7 +192,7 @@ public class PhiAccrualFailureDetector
             return this;
         }
 
-        public PhiAccuralFailureDetector build()
+        public PhiAccrualFailureDetector build()
         {
             return new PhiAccrualFailureDetector(threshold, maxSampleSize, minStdDeviationMillis, acceptableHeartbeatPauseMillis, firstHeartbeatEstimateMillis);
         }
