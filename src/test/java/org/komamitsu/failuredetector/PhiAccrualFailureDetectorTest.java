@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Mitsunori Komatsu (komamitsu)
+ * Copyright 2021 Mitsunori Komatsu (komamitsu)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PhiAccuralFailureDetectorTest
+public class PhiAccrualFailureDetectorTest
 {
     @Test
     public void test()
     {
-        PhiAccuralFailureDetector failureDetector = new PhiAccuralFailureDetector.Builder().build();
+        PhiAccrualFailureDetector failureDetector = new PhiAccrualFailureDetector.Builder().build();
         long now = 1420070400000L;
         for (int i = 0; i < 300; i++) {
             long timestampMillis = now + i * 1000;
