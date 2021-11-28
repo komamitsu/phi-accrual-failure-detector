@@ -1,4 +1,4 @@
 .gradle
 .idea
 build
-phi-accural-failure-detector.iml
+*.iml

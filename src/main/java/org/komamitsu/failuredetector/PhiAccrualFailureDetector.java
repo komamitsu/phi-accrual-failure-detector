@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Mitsunori Komatsu (komamitsu)
+ * Copyright 2021 Mitsunori Komatsu (komamitsu)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * where F is the cumulative distribution function of a normal distribution with mean
  * and standard deviation estimated from historical heartbeat inter-arrival times.
  */
-public class PhiAccuralFailureDetector
+public class PhiAccrualFailureDetector
 {
     private final double threshold;
     private final double minStdDeviationMillis;
@@ -69,8 +69,8 @@ public class PhiAccuralFailureDetector
      *   to this duration, with a with rather high standard deviation (since environment is unknown
      *   in the beginning)
      */
-    private PhiAccuralFailureDetector(double threshold, int maxSampleSize, double minStdDeviationMillis,
-            long acceptableHeartbeatPauseMillis, long firstHeartbeatEstimateMillis)
+    private PhiAccrualFailureDetector(double threshold, int maxSampleSize, double minStdDeviationMillis,
+                                      long acceptableHeartbeatPauseMillis, long firstHeartbeatEstimateMillis)
     {
         if (threshold <= 0) {
             throw new IllegalArgumentException("Threshold must be > 0: " + threshold);
@@ -192,9 +192,9 @@ public class PhiAccuralFailureDetector
             return this;
         }
 
-        public PhiAccuralFailureDetector build()
+        public PhiAccrualFailureDetector build()
         {
-            return new PhiAccuralFailureDetector(threshold, maxSampleSize, minStdDeviationMillis, acceptableHeartbeatPauseMillis, firstHeartbeatEstimateMillis);
+            return new PhiAccrualFailureDetector(threshold, maxSampleSize, minStdDeviationMillis, acceptableHeartbeatPauseMillis, firstHeartbeatEstimateMillis);
         }
     }
 

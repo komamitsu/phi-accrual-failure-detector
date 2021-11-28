@@ -1,4 +1,4 @@
-# phi-accural-failure-detector
+# phi-accrual-failure-detector
 A port of [Akka's Phi Accrual Failure Detector](https://github.com/akka/akka/blob/master/akka-remote/src/main/scala/akka/remote/PhiAccrualFailureDetector.scala).
 
 Implementation of 'The Phi Accrual Failure Detector' by Hayashibara et al. as defined in [their paper](http://ddg.jaist.ac.jp/pub/HDY+04.pdf)
@@ -16,21 +16,21 @@ where F is the cumulative distribution function of a normal distribution with me
 ### Gradle
 
     dependencies {
-        compile 'org.komamitsu:phi-accural-failure-detector:0.0.5'
+        compile 'org.komamitsu:phi-accrual-failure-detector:1.0.0'
     }
 
 ### Maven
 
     <dependency>
         <groupId>org.komamitsu</groupId>
-        <artifactId>phi-accural-failure-detector</artifactId>
-        <version>0.0.5</version>
+        <artifactId>phi-accrual-failure-detector</artifactId>
+        <version>1.0.0</version>
     </dependency>
  
  
 ## Usage
  
-    PhiAccuralFailureDetector failureDetector = new PhiAccuralFailureDetector.Builder().build();
+    PhiAccrualFailureDetector failureDetector = new PhiAccrualFailureDetector.Builder().build();
     System.out.println("The node is alive.");
     for (int i = 0; i < 5; i++) {
         failureDetector.heartbeat();
